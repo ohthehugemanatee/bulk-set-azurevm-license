@@ -37,6 +37,13 @@ while getopts ":l:r:i:" arg; do
 done
 shift $((OPTIND-1))
 
+# Check if azCLI is installed
+if ! command -v az &> /dev/null
+then
+    echo "azCLI could not be found. Please add install it or add it to your PATH."
+    exit 1
+fi
+
 # Check if the license type is set and one of the allowed values
 if [[ -z "$license_type" ]]; then
     echo "Parameter --license-type is required"
