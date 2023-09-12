@@ -73,7 +73,10 @@ az vm extension set \
     --publisher Microsoft.Azure.AzureHybridBenefit \
     --name AHBForRHEL \
     --resource-group $resource_group \
-    --settings "{\"licenseType\":\"$license_type\"}" \
+    --ids $vm_ids
+az vm update \
+    --resource-group $resource_group \
+    --license-type $license_type \
     --ids $vm_ids
 
 echo "Done"
