@@ -132,6 +132,5 @@ az vm update \
     --set tags.licensePrivateOfferId=$offer_id \
     --license-type $license_type \
     --ids $vm_ids
-
 echo "Done"
 exit 0
