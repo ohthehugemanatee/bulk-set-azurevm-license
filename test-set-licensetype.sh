@@ -58,8 +58,35 @@ test_missing_azcli() {
     # Check the result.
     assertEquals "The script should have failed with missing azCLI." 1 $errorcode
     assertContains "The script should have printed failure information." "$output" "ERROR: azCLI could not be found. Please install it or add it to your PATH."
+    assertContains "The script should have printed usage information." "$output" "$(usage)"
 }
 
+# Test failing with invalid license type.
+test_invalid_license_type() {
+    # Mock AzCLI
+    az() { return 0; }
+    # Run the script.
+    output=$(source ./set-licensetype.sh --license-type invalid --resource-group myResourceGroup --ids vms.txt)
+
+    # Check the result.
+    assertEquals "The script should have failed with invalid license type." 1 $?
+    assertContains "The script should have printed failure information." "$output" "Parameter --license-type invalid is not allowed. License type must be one of the following values: ${ALLOWED_LICENSE_TYPES[@]}"
+    assertContains "The script should have printed usage information." "$output" "$(usage)"
+}
+
+# Test failing with invalid VM IDs file.
+test_invalid_ids_file() {
+    # Mock AzCLI
+    az() { return 0; }
+
+    # Run the script.
+    output=$(source ./set-licensetype.sh --license-type RHEL_BYOS --resource-group myResourceGroup --ids invalid)
+
+    # Check the result.
+    assertEquals "The script should have failed with invalid VM IDs file." 1 $?
+    assertContains "The script should have printed failure information." "$output" "ERROR: File invalid does not exist."
+    assertContains "The script should have printed usage information." "$output" "$(usage)"
+}
 
 # Run the tests.
 . shunit2
