@@ -38,7 +38,7 @@ ids=""
 offer_id=""
 
 # Parse the command line options
-OPTS=`getopt -o axby -l long-key: -- "$@"`
+OPTS=$(getopt -o l:g:i:o: -l license-type:,resource-group:,ids:,offer-id: -n "$0" -- "$@") || exit
 eval set -- "$OPTS"
 while [[ $1 != -- ]]; do
     case $1 in
