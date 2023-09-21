@@ -6,10 +6,11 @@
 # Include helper functions.
 source ./includes.sh
 
+# Mock AzCLI.
+az() { return 0; }
+
 # Test failing with various missing (required) parameters.
 test_missing_parameters() {
-    # Mock AzCLI.
-    az() { return 0; }
     # Run the script.
     output=$(source ./set-licensetype.sh)
 
@@ -57,6 +58,8 @@ test_missing_azcli() {
     errorcode=$?
     # Re-set the path
     PATH=${REALPATH}
+    # Re-set the default mock
+    az() { return 0; }
     # Check the result.
     assertEquals "The script should have failed with missing azCLI." 1 $errorcode
     assertContains "The script should have printed failure information." "$output" "ERROR: azCLI could not be found. Please install it or add it to your PATH."
@@ -65,8 +68,6 @@ test_missing_azcli() {
 
 # Test failing with invalid license type.
 test_invalid_license_type() {
-    # Mock AzCLI
-    az() { return 0; }
     # Run the script.
     output=$(source ./set-licensetype.sh --license-type invalid --resource-group myResourceGroup --ids vms.txt)
 
@@ -78,9 +79,6 @@ test_invalid_license_type() {
 
 # Test failing with invalid VM IDs file.
 test_invalid_ids_file() {
-    # Mock AzCLI
-    az() { return 0; }
-
     # Run the script.
     output=$(source ./set-licensetype.sh --license-type RHEL_BYOS --resource-group myResourceGroup --ids invalid)
 
@@ -92,8 +90,6 @@ test_invalid_ids_file() {
 
 # Test failing with invalid offer ID.
 test_invalid_offer_id() {
-    # Mock AzCLI
-    az() { return 0; }
     # Create a file with VM IDs.
     echo "vm1" > vms.txt
     # Run the script.
@@ -109,7 +105,6 @@ test_invalid_offer_id() {
 
 # Test successful execution.
 test_success() {
-    executionLog=""
     # Mock AzCLI
     az() { echo "az $@"; return 0; }
     # Create a file with VM IDs.
