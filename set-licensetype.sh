@@ -36,35 +36,30 @@ license_type=""
 resource_group=""
 ids=""
 offer_id=""
-# Transform long options to short ones
-for arg in "$@"; do
-  shift
-  case "$arg" in
-    '--license-type')   set -- "$@" '-l'   ;;
-    '--resource-group') set -- "$@" '-g'   ;;
-    '--ids')   set -- "$@" '-i'   ;;
-    '--offer-id')     set -- "$@" '-0'   ;;
-    "--"*)           usage ${arg}; exit 2;;
-    *)          set -- "$@" "$arg" ;;
-  esac
-done
-while getopts ":l:r:i:" arg; do
-    case "${arg}" in
-        l)
-            license_type=${OPTARG}
+
+# Parse the command line options
+OPTS=`getopt -o axby -l long-key: -- "$@"`
+eval set -- "$OPTS"
+while [[ $1 != -- ]]; do
+    case $1 in
+        -l|--license-type)
+            license_type=${2}
+            shift 2
             ;;
-        g)
-            resource_group=${OPTARG}
+        -g|--resource-group)
+            resource_group=${2}
+            shift 2
             ;;
-        i)
-            ids=${OPTARG}
+        -i|--ids)
+            ids=${2}
+            shift 2
             ;;
-        o)
-            offer_id=${OPTARG}
+        -o|--offer-id)
+            offer_id=${2}
+            shift 2
             ;;
         esac
 done
-shift $((OPTIND-1))
 
 # Check if azCLI is installed
 if ! command -v az &> /dev/null
