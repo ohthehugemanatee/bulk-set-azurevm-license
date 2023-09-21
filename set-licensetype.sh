@@ -103,7 +103,12 @@ fi
 vm_ids=$(cat $ids)
 
 # Install the Azure Hybrid Benefit extension and set the license type for each VM
-echo "Installing Azure Hybrid Benefit extension and setting license type $license_type for listed VMs in resource group $resource_group"
+statusline="Installing Azure Hybrid Benefit extension and setting license type $license_type"
+if [[ ! -z "$offer_id" ]]; then
+    statusline="$statusline and offer id $offer_id"
+fi
+statusline="$statusline for listed VMs in resource group $resource_group"
+echo "$statusline"
 az vm extension set \
     --publisher Microsoft.Azure.AzureHybridBenefit \
     --name AHBForRHEL \
