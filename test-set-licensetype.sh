@@ -109,6 +109,7 @@ test_success() {
     az() { echo "az $@"; return 0; }
     # Create a file with VM IDs.
     echo "vm1" > vms.txt
+    echo "vm2" >> vms.txt
     # Run the script.
     output=$(source ./set-licensetype.sh --license-type RHEL_BYOS --resource-group myResourceGroup --ids vms.txt)
     errorcode=$?
@@ -116,9 +117,9 @@ test_success() {
     rm vms.txt
     # Check the result.
     assertEquals "The script should have succeeded." 0 $errorcode
-    # Check the execution log.
-    assertContains "The script should have executed az vm update." "$output" "az vm update --resource-group myResourceGroup --set tags.licensePrivateOfferId= --license-type RHEL_BYOS --ids vm1"
-    assertContains "The script should have executed az vm extension set." "$output" "az vm extension set --publisher Microsoft.Azure.AzureHybridBenefit --name AHBForRHEL --resource-group myResourceGroup --ids vm1"
+    # Check the execution log (should execute on both VMs).
+    assertContains "The script should have executed az vm update." "$output" "az vm update --resource-group myResourceGroup --set tags.licensePrivateOfferId= --license-type RHEL_BYOS --ids vm1 vm2"
+    assertContains "The script should have executed az vm extension set." "$output" "az vm extension set --publisher Microsoft.Azure.AzureHybridBenefit --name AHBForRHEL --resource-group myResourceGroup --ids vm1 vm2"
 }
 
 # Run the tests.
