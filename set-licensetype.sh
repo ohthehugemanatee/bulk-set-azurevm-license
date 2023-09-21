@@ -42,6 +42,10 @@ exit_abnormal() {
 }
 
 # Initialize parameters specified from command line
+license_type=""
+resource_group=""
+ids=""
+offer_id=""
 while getopts ":l:r:i:" arg; do
     case "${arg}" in
         l | license-type)
