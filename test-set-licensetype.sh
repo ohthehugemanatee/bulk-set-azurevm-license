@@ -6,8 +6,10 @@
 # Include helper functions.
 source ./includes.sh
 
-# Test failing with missing parameters.
+# Test failing with various missing (required) parameters.
 test_missing_parameters() {
+    # Mock AzCLI.
+    az() { return 0; }
     # Run the script.
     output=$(source ./set-licensetype.sh)
 
@@ -15,6 +17,32 @@ test_missing_parameters() {
     assertEquals "The script should have failed because of missing parameters." 1 $?
     assertContains "The script should have printed failure information." "$output" "ERROR: Parameter --license-type is required"
     assertContains "The script should have printed usage information." "$output" "$(usage)"
+    # Run the script missing license-type.
+    output=$(source ./set-licensetype.sh --resource-group invalid --ids vms.txt)
+
+    # Check the result.
+    assertEquals "The script should have failed because of missing parameters." 1 $?
+    assertContains "The script should have printed failure information." "$output" "ERROR: Parameter --license-type is required"
+    assertContains "The script should have printed usage information." "$output" "$(usage)"
+
+    output=$(source ./set-licensetype.sh --license-type RHEL_BYOS --resource-group invalid --ids vms.txt)
+
+    # Run the script missing resource-group.
+    output=$(source ./set-licensetype.sh --license-type RHEL_BYOS --ids vms.txt)
+
+    # Check the result.
+    assertEquals "The script should have failed because of missing parameters." 1 $?
+    assertContains "The script should have printed failure information." "$output" "ERROR: Parameter --resource-group is required"
+    assertContains "The script should have printed usage information." "$output" "$(usage)"
+
+    # Run the script missing ids.
+    output=$(source ./set-licensetype.sh --license-type RHEL_BYOS --resource-group invalid)
+
+    # Check the result.
+    assertEquals "The script should have failed because of missing parameters." 1 $?
+    assertContains "The script should have printed failure information." "$output" "ERROR: Parameter --ids is required"
+    assertContains "The script should have printed usage information." "$output" "$(usage)"
+
 }
 
 # Test failing with missing azCLI.
