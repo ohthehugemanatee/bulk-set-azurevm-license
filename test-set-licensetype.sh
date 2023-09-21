@@ -50,6 +50,8 @@ test_missing_azcli() {
     # Unset the path to azCLI.
     REALPATH=${PATH}
     PATH=$(sed 's/\/usr\/bin//g' <<< ${PATH})
+    # Unset any previous mock.
+    unset -f az
     # Run the script.
     output=$(source ./set-licensetype.sh --license-type RHEL_BYOS --resource-group myResourceGroup --ids vms.txt)
     errorcode=$?
