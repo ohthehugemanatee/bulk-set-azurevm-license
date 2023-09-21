@@ -25,16 +25,16 @@ set -eu
 # Initialize parameters specified from command line
 while getopts ":l:r:i:" arg; do
     case "${arg}" in
-        l)
+        l | license-type)
             license_type=${OPTARG}
             ;;
-        r)
+        r | resource-group)
             resource_group=${OPTARG}
             ;;
-        i)
+        i | ids)
             ids=${OPTARG}
             ;;
-        o)
+        o | offer-id)
             offer_id=${OPTARG}
             ;;
         esac
