@@ -95,7 +95,7 @@ if [[ -z "$ids" ]]; then
     exit_abnormal
 fi
 if [ ! -f "$ids" ]; then
-    echo "ERROR: File $ids does not exist"
+    echo "ERROR: File $ids does not exist."
     echo ""
     exit_abnormal
 fi
