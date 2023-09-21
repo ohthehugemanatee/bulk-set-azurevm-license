@@ -7,20 +7,39 @@ set -eu
 # list of Azure RHEL VMs in a single resource group.
 #
 # Usage: 
-# ./set-licensetype.sh --license-type [license type] --resource-group [resource group] --ids [TXT file with VM IDs]
+# ./set-licensetype.sh --license-type [license type] --offer-id [offer id] --resource-group [resource group] --ids [TXT file with VM IDs]
 # 
 # Example: 
 # ./set-licensetype.sh --license-type RHEL_BYOS --resource-group myResourceGroup --ids vms.txt
 #
 # Parameters:
-#  --license-type: The license type to set for the VMs. 
-#                  Possible values are: `RHEL_BASE`, `RHEL_EUS`, `RHEL_SAPAPPS`, `RHEL_SAPHA`, `RHEL_BASESAPAPPS`, `RHEL_BASESAPHA`, `RHEL_BYOS`
-#  --resource-group: The resource group containing the VMs.
-#  --ids: A TXT file containing the VM IDs, one per line.
-#  --offer-id: If you bought Red Hat subscriptions from Microsoft, the Id of the Marketplace private offer.
+#  --license-type / -l :    The license type to set for the VMs. 
+#                           Possible values are: `RHEL_BASE`, `RHEL_EUS`, `RHEL_SAPAPPS`, `RHEL_SAPHA`, `RHEL_BASESAPAPPS`, `RHEL_BASESAPHA`, `RHEL_BYOS`
+#  --resource-group / -g :  The resource group containing the VMs.
+#  --ids / -i :             A TXT file containing the VM IDs, one per line.
+#  --offer-id / -o :        [OPTIONAL] If you bought Red Hat subscriptions from Microsoft, the Id of the Marketplace private offer.
 # 
-# All parameters are required.
+# All parameters are required except offer-id.
 #
+
+# Print usage information.
+usage() {
+    echo "Usage: $0 --license-type [license type] --offer-id [optional offer id] --resource-group [resource group] --ids [TXT file with VM IDs]"
+    echo "Example: $0 --license-type RHEL_BYOS --resource-group myResourceGroup --ids vms.txt"
+    echo "Parameters:"
+    echo "  --license-type / -l :    The license type to set for the VMs. Possible values are: RHEL_BASE, RHEL_EUS, RHEL_SAPAPPS, RHEL_SAPHA, RHEL_BASESAPAPPS, RHEL_BASESAPHA, RHEL_BYOS"
+    echo "  --resource-group / -g :  The resource group containing the VMs."
+    echo "  --ids / -i :             A TXT file containing the VM IDs, one per line."
+    echo "  --offer-id / -o :        [OPTIONAL] If you bought Red Hat subscriptions from Microsoft, the Id of the Marketplace private offer."
+    echo ""
+    echo "All parameters are required except offer-id."
+}
+
+# Exit with usage information.
+exit_abnormal() {
+    usage
+    exit 1
+}
 
 # Initialize parameters specified from command line
 while getopts ":l:r:i:" arg; do
@@ -44,14 +63,16 @@ shift $((OPTIND-1))
 # Check if azCLI is installed
 if ! command -v az &> /dev/null
 then
-    echo "azCLI could not be found. Please add install it or add it to your PATH."
-    exit 1
+    echo "ERROR: azCLI could not be found. Please add install it or add it to your PATH."
+    echo ""
+    exit_abnormal
 fi
 
 # Check if the license type is set and one of the allowed values
 if [[ -z "$license_type" ]]; then
-    echo "Parameter --license-type is required"
-    exit 1
+    echo "ERROR: Parameter --license-type is required"
+    echo ""
+    exit_abnormal
 fi
 ALLOWED_LICENSE_TYPES=(RHEL_BASE RHEL_EUS RHEL_SAPAPPS RHEL_SAPHA RHEL_BASESAPAPPS RHEL_BASESAPHA RHEL_BYOS)
 if [[ ! " ${ALLOWED_LICENSE_TYPES[@]} " =~ " ${license_type} " ]]; then
@@ -61,18 +82,21 @@ fi
 
 # Check if the resource group is set
 if [[ -z "$resource_group" ]]; then
-    echo "Parameter --resource-group is required"
-    exit 1
+    echo "ERROR: Parameter --resource-group is required"
+    echo ""
+    exit_abnormal
 fi
 
 # Check if the VM IDs file is set and exists
 if [[ -z "$ids" ]]; then
-    echo "Parameter --ids is required"
-    exit 1
+    echo "ERROR: Parameter --ids is required"
+    echo ""
+    exit_abnormal
 fi
 if [ ! -f "$ids" ]; then
-    echo "File $ids does not exist"
-    exit 1
+    echo "ERROR: File $ids does not exist"
+    echo ""
+    exit_abnormal
 fi
 
 # Get the VM IDs from the file
