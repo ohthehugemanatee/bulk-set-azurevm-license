@@ -17,6 +17,7 @@ set -eu
 #                  Possible values are: `RHEL_BASE`, `RHEL_EUS`, `RHEL_SAPAPPS`, `RHEL_SAPHA`, `RHEL_BASESAPAPPS`, `RHEL_BASESAPHA`, `RHEL_BYOS`
 #  --resource-group: The resource group containing the VMs.
 #  --ids: A TXT file containing the VM IDs, one per line.
+#  --offer-id: If you bought Red Hat subscriptions from Microsoft, the Id of the Marketplace private offer.
 # 
 # All parameters are required.
 #
@@ -32,6 +33,9 @@ while getopts ":l:r:i:" arg; do
             ;;
         i)
             ids=${OPTARG}
+            ;;
+        o)
+            offer_id=${OPTARG}
             ;;
         esac
 done
@@ -83,6 +87,7 @@ az vm extension set \
     --ids $vm_ids
 az vm update \
     --resource-group $resource_group \
+    --set tags.licensePrivateOfferId=$offer_id \
     --license-type $license_type \
     --ids $vm_ids
 
