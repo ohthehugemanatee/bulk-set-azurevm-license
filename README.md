@@ -11,6 +11,10 @@ Resource group is for the Azure Resource Group, and Ids refers to a text file wh
 
 If you purchased Red Hat subscriptions from the Azure Marketplace, you may enter your private offer Id at the same time with the `-o`/`--offer-id` parameter.
 
+## Tests
+
+Software testing isn't just a fetish - it's a lifestyle. You can test this script if you install shunit2, with `./test-set-licensetype.sh`.
+
 ## Can't I do this with Azure CLI?
 
 Yes, this is just an ease-of-use wrapper around two AzCLI commands:
