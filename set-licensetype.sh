@@ -63,7 +63,7 @@ shift $((OPTIND-1))
 # Check if azCLI is installed
 if ! command -v az &> /dev/null
 then
-    echo "ERROR: azCLI could not be found. Please add install it or add it to your PATH."
+    echo "ERROR: azCLI could not be found. Please install it or add it to your PATH."
     echo ""
     exit_abnormal
 fi
