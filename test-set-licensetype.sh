@@ -88,5 +88,22 @@ test_invalid_ids_file() {
     assertContains "The script should have printed usage information." "$output" "$(usage)"
 }
 
+# Test failing with invalid offer ID.
+test_invalid_offer_id() {
+    # Mock AzCLI
+    az() { return 0; }
+    # Create a file with VM IDs.
+    echo "vm1" > vms.txt
+    # Run the script.
+    output=$(source ./set-licensetype.sh --license-type RHEL_BYOS --resource-group myResourceGroup --ids vms.txt --offer-id invalid)
+    errorcode=$?
+    # Clean up the file.
+    rm vms.txt
+    # Check the result.
+    assertEquals "The script should have failed with invalid offer ID." 1 $errorcode
+    assertContains "The script should have printed failure information." "$output" "Parameter --offer-id invalid is not a valid GUID."
+    assertContains "The script should have printed usage information." "$output" "$(usage)"
+}
+
 # Run the tests.
 . shunit2

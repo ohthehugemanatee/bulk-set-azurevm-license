@@ -100,6 +100,18 @@ if [ ! -f "$ids" ]; then
     exit_abnormal
 fi
 
+# Check if the offer ID is set and a valid GUID.
+if [[ ! -z "$offer_id" ]]; then
+    # UUID regex validation from https://stackoverflow.com/a/13653180
+    uuid_regex=“/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i”
+
+    if ! [[ $offer_id =~ $uuid_regex ]]; then
+        echo "ERROR: Parameter --offer-id $offer_id is not a valid GUID."
+        echo ""
+        exit_abnormal
+    fi
+fi
+
 # Get the VM IDs from the file
 vm_ids=$(cat $ids)
 
