@@ -15,7 +15,7 @@ All parameters are required except `offer-id`.
 
 ## Tests
 
-Software testing isn't just a fetish - it's a lifestyle. You can test this script if you install shunit2, with `./test-set-licensetype.sh`.
+Software testing isn't just a fetish - it's a lifestyle. You can test this script if you install shunit2, with `./tests/test-set-licensetype.sh`. Note that it is designed to be run from the repo root directory.
 
 ## Can't I do this with Azure CLI?
 

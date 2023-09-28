@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Test the set-licensetype.sh script.
+# Test the set-licensetype.sh script. To be run from the parent directory.
 #
 
 # Include helper functions.
