@@ -50,19 +50,30 @@ test_missing_parameters() {
 test_missing_azcli() {
     # Unset any previous mock.
     unset -f az
-    # Unset the path to azCLI.
-    REALPATH=${PATH}
-    # Get the path to azCLI.
-    AzPath=$(dirname $(which az))
-    # Remove the path to azCLI from the PATH variable.
-    PATH=$(sed 's/'${AzPath}'//g' <<< ${PATH})
+    # If azCLI exists, get it out of the way.
+    if command -v az &> /dev/null
+    then
+        # Get the path to azCLI.
+        AzPath=$(dirname $(which az))
+        # If it's in /usr/bin, rename it temporarily
+        if [[ ${AzPath} == "/usr/bin" ]]; then
+            mv ${AzPath}/az ${AzPath}/az.bak
+        else
+            # Otherwise, remove it from the path.
+            PATH=$(sed 's/'${AzPath}'//g' <<< ${PATH})
+        fi
+    fi
 
     # Run the script.
     output=$(source ./set-licensetype.sh --license-type RHEL_BYOS --resource-group myResourceGroup --ids vms.txt)
     errorcode=$?
     
-    # Re-set the path
-    PATH=${REALPATH}
+    # Restore azCLI if necessary.
+    if [[ -f ${AzPath}/az.bak ]]; then
+        mv ${AzPath}/az.bak ${AzPath}/az
+    elif [[ ! -z ${AzPath} ]]; then
+        PATH=${PATH}:${AzPath}
+    fi
     # Re-set the default mock
     az() { return 0; }
     # Check the result.
