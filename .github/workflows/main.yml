@@ -11,5 +11,7 @@ jobs:
             - name: Install shunit2
               run: sudo apt-get install ./shunit2_2.1.8-3_all.deb
             - name: run my tests
-              run: "./tests/test-set-licensetype.sh"
-            
+              run: "./tests/test-set-licensetype.sh"            
+            - name: Setup tmate session
+              if: success() || failure()
+              uses: mxschmitt/action-tmate@v3
