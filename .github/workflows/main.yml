@@ -6,7 +6,7 @@ jobs:
         runs-on: ubuntu-latest
         container: ubuntu:latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4.1.0
             - name: Update apt repos
               run: apt-get update
             - name: install wget
