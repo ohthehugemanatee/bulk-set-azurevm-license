@@ -79,7 +79,7 @@ fi
 ALLOWED_LICENSE_TYPES=(RHEL_BASE RHEL_EUS RHEL_SAPAPPS RHEL_SAPHA RHEL_BASESAPAPPS RHEL_BASESAPHA RHEL_BYOS)
 if [[ ! " ${ALLOWED_LICENSE_TYPES[@]} " =~ " ${license_type} " ]]; then
     echo "Parameter --license-type ${license_type} is not allowed. License type must be one of the following values: ${ALLOWED_LICENSE_TYPES[@]}"
-    exit 1
+    exit_abnormal
 fi
 
 # Check if the resource group is set
