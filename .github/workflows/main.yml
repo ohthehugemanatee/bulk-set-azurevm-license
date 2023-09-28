@@ -6,7 +6,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
+            - name: Download shunit2
+              run:  wget http://ftp.de.debian.org/debian/pool/main/s/shunit2/shunit2_2.1.8-3_all.deb
+            - name: Install shunit2
+              run: sudo apt-get install ./shunit2_2.1.8-3_all.deb
             - name: run my tests
-              uses: sudo-bot/action-shunit2@latest
-              with:
-                  cli: "./tests/test-set-licensetype.sh"
+              run: "./tests/test-set-licensetype.sh"
+            
