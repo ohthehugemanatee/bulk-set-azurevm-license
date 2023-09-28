@@ -1,4 +1,7 @@
 # bulk-set-azurevm-license
+
+![Test status](https://github.com/ohthehugemanatee/bulk-set-azurevm-license/actions/workflows/main.yml/badge.svg)
+
 A simple script to install [Azure Hybrid Benefit](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/azure-hybrid-benefit-linux) and set the license value (and optional subscription private offer Id) on many Azure RHEL VMs at once. Just load the VM ids into a text file and feed them into this bash script.
 
 ## Usage
