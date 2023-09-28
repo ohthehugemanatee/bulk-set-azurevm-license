@@ -8,12 +8,12 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: Update apt repos
-              run: sudo apt-get update
+              run: apt-get update
             - name: install wget
-              run: sudo apt-get install wget
+              run: apt-get install wget
             - name: Download shunit2
               run:  wget http://ftp.de.debian.org/debian/pool/main/s/shunit2/shunit2_2.1.8-3_all.deb
             - name: Install shunit2
-              run: sudo apt-get install ./shunit2_2.1.8-3_all.deb
+              run: apt-get install ./shunit2_2.1.8-3_all.deb
             - name: run my tests
               run: "./tests/test-set-licensetype.sh" 
