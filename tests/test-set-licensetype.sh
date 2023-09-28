@@ -48,14 +48,19 @@ test_missing_parameters() {
 
 # Test failing with missing azCLI.
 test_missing_azcli() {
-    # Unset the path to azCLI.
-    REALPATH=${PATH}
-    PATH=$(sed 's/\/usr\/bin//g' <<< ${PATH})
     # Unset any previous mock.
     unset -f az
+    # Unset the path to azCLI.
+    REALPATH=${PATH}
+    # Get the path to azCLI.
+    AzPath=$(dirname $(which az))
+    # Remove the path to azCLI from the PATH variable.
+    PATH=$(sed 's/'${AzPath}'//g' <<< ${PATH})
+
     # Run the script.
     output=$(source ./set-licensetype.sh --license-type RHEL_BYOS --resource-group myResourceGroup --ids vms.txt)
     errorcode=$?
+    
     # Re-set the path
     PATH=${REALPATH}
     # Re-set the default mock
