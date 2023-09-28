@@ -3,8 +3,9 @@
 set -eu
 
 #
-# Installs the Azure Hybrid Benefit extension and sets the license value for a
-# list of Azure RHEL VMs in a single resource group.
+# Installs the Azure Hybrid Benefit extension and sets the license value
+# and optional subscription private offer Id for a list of Azure RHEL VMs 
+# in a single resource group.
 #
 # Usage: 
 # ./set-licensetype.sh --license-type [license type] --offer-id [offer id] --resource-group [resource group] --ids [TXT file with VM IDs]
